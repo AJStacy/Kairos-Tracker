@@ -10,3 +10,7 @@
     sourceType: module
     ecmaFeatures:
       modules: true
+  rules:
+    "no-console": off
+    "import/no-unresolved": off
+    camelcase: off

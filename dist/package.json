@@ -1,0 +1,37 @@
+{
+    "name": "kairos-tracker",
+    "version": "0.0.1",
+    "description": "A command line tool set for tracking time, taking notes, and other useful IRL tasks.",
+    "main": "index.js",
+    "repository": "git@github.com:AJStacy/Kairos-Tracker.git",
+    "author": "Andrew Stacy <ajstacy@gmail.com>",
+    "license": "GNU-GPLv3",
+    "preferGlobal": true,
+    "bin": {
+        "assets": "index.js"
+    },
+    "scripts": {
+        "test": "ava",
+        "test:watch": "ava --watch",
+        "build": "tsc",
+        "build:production": "tsc",
+        "watch": "tsc --watch"
+    },
+    "devDependencies": {
+        "@types/lowdb": "^1.0.7",
+        "@types/node": "^11.13.4",
+        "ava": "^1.4.1",
+        "eslint": "5.3.0",
+        "eslint-config-airbnb-base": "13.1.0",
+        "eslint-plugin-import": "^2.14.0",
+        "typescript": "^3.4.3",
+        "typescript-eslint-parser": "^22.0.0"
+    },
+    "dependencies": {
+        "chalk": "^2.4.2",
+        "commander": "^2.20.0",
+        "date-fns": "^1.30.1",
+        "lodash": "^4.17.11",
+        "lowdb": "^1.0.0"
+    }
+}

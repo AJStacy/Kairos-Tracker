@@ -1,0 +1,32 @@
+{
+  "name": "Kairos-Tracker",
+  "version": "0.0.1",
+  "description": "A command line tool set for tracking time, taking notes, and other useful IRL tasks.",
+  "main": "index.js",
+  "repository": "git@github.com:AJStacy/Kairos-Tracker.git",
+  "author": "Andrew Stacy <ajstacy@gmail.com>",
+  "license": "GNU-GPLv3",
+  "private": false,
+  "scripts": {
+    "test": "ava",
+    "test:watch": "ava --watch",
+    "build": "tsc; webpack --env.development",
+    "build:production": "tsc; webpack --env.production",
+    "postbuild": "tscpaths -p tsconfig.json -s ./src -o ./types",
+    "postbuild:production": "tscpaths -p tsconfig.json -s ./src -o ./types",
+    "analyze": "yarn build:production --env.withAnalysis",
+    "watch": "webpack --env.development --watch"
+  },
+  "devDependencies": {
+    "@types/node": "^11.13.4",
+    "ava": "^1.4.1",
+    "eslint": "5.3.0",
+    "eslint-config-airbnb-base": "13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "typescript": "^3.4.3",
+    "typescript-eslint-parser": "^22.0.0"
+  },
+  "dependencies": {
+    "commander": "^2.20.0"
+  }
+}

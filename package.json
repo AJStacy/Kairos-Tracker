@@ -13,14 +13,12 @@
   "scripts": {
     "test": "ava",
     "test:watch": "ava --watch",
-    "build": "tsc; webpack --env.development",
-    "build:production": "tsc; webpack --env.production",
-    "postbuild": "tscpaths -p tsconfig.json -s ./src -o ./types",
-    "postbuild:production": "tscpaths -p tsconfig.json -s ./src -o ./types",
-    "analyze": "yarn build:production --env.withAnalysis",
-    "watch": "webpack --env.development --watch"
+    "build": "tsc",
+    "build:production": "tsc",
+    "watch": "tsc --watch"
   },
   "devDependencies": {
+    "@types/lowdb": "^1.0.7",
     "@types/node": "^11.13.4",
     "ava": "^1.4.1",
     "eslint": "5.3.0",
@@ -30,6 +28,8 @@
     "typescript-eslint-parser": "^22.0.0"
   },
   "dependencies": {
-    "commander": "^2.20.0"
+    "chalk": "^2.4.2",
+    "commander": "^2.20.0",
+    "lowdb": "^1.0.0"
   }
 }

@@ -1,5 +1,13 @@
+import * as lowdb from 'lowdb';
+import * as FileSync from 'lowdb/adapters/FileSync';
 
+const db = lowdb(FileSync);
+console.log(db);
 
-export default class Kairos {
+const start = (label?: string) => {
 
-}
+};
+
+const stop = (label?: string) => {
+
+};

@@ -1,6 +1,7 @@
+import chalk from 'chalk';
 import * as getTime from 'date-fns/get_time';
 import * as formatTime from 'date-fns/format';
-import { isString } from 'lodash';
+import * as shortid from 'shortid';
 
 import db from '../db';
 
@@ -20,29 +21,46 @@ const newInterval = (message?: string):Interval => ({
   ...message && { message },
 });
 
-const writeLabeledInterval = (lbl: string, interval: Interval):void => {
-  db.set(`intervals.labeled.${lbl}`, interval);
-};
-
-const getLabeledInterval = (lbl: string):Interval => db.get(`intervals.labeled.${lbl}`).value();
-
-const writeUnlabeledInterval = (interval: Interval):number => (
-  db.get('intervals.unlabeled').push(interval).write().id
+const writeInterval = (id: string, interval: Interval):Interval => (
+  db.set(`intervals.${id}`, interval).write()
 );
 
-const getUnlabeledInterval = (i: number):Interval => db.get(`intervals.unlabeled[${i}]`).value();
+const getInterval = (id: string):Interval => db.get(`intervals.${id}`).value();
 
-const getIntervalById = (id: string|number):Interval => {
-  if (!id) { throw Error('The provided ID is invalid.'); }
-  return isString(id) ? getLabeledInterval(id) : getUnlabeledInterval(id);
+const updateInterval = (id: string, changes: object):void => (
+  db.get(`intervals.${id}`).assign({ ...changes }).write()
+);
+
+const deleteInterval = (id: string):boolean => db.unset(`intervals.${id}`).write();
+
+const listIntervals = ():any[][] => {
+  const intervals = db.get('intervals').value();
+  const table = Object.keys(intervals).map(id => [id, ...Object.values(intervals[id])]);
+  table.unshift([
+    chalk.inverse(' ID '),
+    chalk.inverse(' Start Time '),
+    chalk.inverse(' End Time '),
+  ]);
+  return table;
+};
+
+const writeLabeledInterval = (label: string, interval: Interval):void => {
+  writeInterval(label, interval);
+};
+
+const writeUnlabeledInterval = (interval: Interval):string => {
+  const id = shortid.generate();
+  writeInterval(id, interval);
+  return id;
 };
 
 export {
   timestamp,
+  listIntervals,
   newInterval,
+  getInterval,
+  updateInterval,
+  deleteInterval,
   writeLabeledInterval,
-  getLabeledInterval,
   writeUnlabeledInterval,
-  getUnlabeledInterval,
-  getIntervalById,
 };

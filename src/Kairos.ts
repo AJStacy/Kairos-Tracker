@@ -2,9 +2,10 @@ import logs from './logs';
 import {
   timestamp,
   newInterval,
+  listIntervals,
+  updateInterval,
   writeLabeledInterval,
   writeUnlabeledInterval,
-  getIntervalById,
 } from './interval/interval';
 
 const start = (label?: string, message?: string):void => {
@@ -16,10 +17,19 @@ const start = (label?: string, message?: string):void => {
   }
 };
 
-const stop = (id: string|number):void => {
+const stop = (id: string):void => {
   try {
-    const interval = getIntervalById(id);
-    interval.end = timestamp();
+    updateInterval(id, { end: timestamp() });
+  } catch (e) {
+    logs.error(e);
+  }
+};
+
+const list = (period?: string):void => {
+  try {
+    logs.table(
+      listIntervals()
+    );
   } catch (e) {
     logs.error(e);
   }
@@ -28,4 +38,5 @@ const stop = (id: string|number):void => {
 export {
   start,
   stop,
+  list,
 };

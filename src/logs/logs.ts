@@ -1,27 +1,32 @@
 import * as chalk from 'chalk';
+import { table as Table } from 'table';
 
 const report = (method: string, msg: string, args: any[]):void => {
   console[<'debug'|'log'|'info'|'warn'|'error'>method](msg, ...args);
 };
 
-const debug = (msg: string, ...args: any[]) => {
+const debug = (msg: any, ...args: any[]):void => {
   report('debug', msg, args);
 };
 
-const log = (msg: string, ...args: any[]) => {
+const log = (msg: any, ...args: any[]):void => {
   report('log', msg, args);
 };
 
-const info = (msg: string, ...args: any[]) => {
+const info = (msg: any, ...args: any[]):void => {
   report('info', msg, args);
 };
 
-const warn = (msg: string, ...args: any[]) => {
+const warn = (msg: any, ...args: any[]):void => {
   report('warn', msg, args);
 };
 
-const error = (msg: string, ...args: any[]) => {
+const error = (msg: any, ...args: any[]):void => {
   report('error', msg, args);
+};
+
+const table = (data: any[], cfg?: any):void => {
+  console.log(Table(data, cfg));
 };
 
 export {
@@ -30,4 +35,5 @@ export {
   info,
   warn,
   error,
+  table,
 };

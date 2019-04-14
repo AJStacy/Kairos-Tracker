@@ -2,7 +2,7 @@ import * as program from 'commander';
 
 import kairos from '../index';
 
-const cli = (version: string):void => {
+export const cli = (version: string):void => {
   program.version(version);
   program
     .command('start [label]')
@@ -13,7 +13,9 @@ const cli = (version: string):void => {
     .command('stop <id>')
     .action((id: string) => kairos.stop(id));
 
+  program
+    .command('list [period]')
+    .action((period) => kairos.list(period));
+
   program.parse(process.argv);
 };
-
-export default cli;

@@ -14,11 +14,19 @@ const start = (label, message) => {
 exports.start = start;
 const stop = (id) => {
     try {
-        const interval = interval_1.getIntervalById(id);
-        interval.end = interval_1.timestamp();
+        interval_1.updateInterval(id, { end: interval_1.timestamp() });
     }
     catch (e) {
         logs_1.default.error(e);
     }
 };
 exports.stop = stop;
+const list = (period) => {
+    try {
+        logs_1.default.table(interval_1.listIntervals());
+    }
+    catch (e) {
+        logs_1.default.error(e);
+    }
+};
+exports.list = list;

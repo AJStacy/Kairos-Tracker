@@ -8,7 +8,7 @@
   "license": "GNU-GPLv3",
   "preferGlobal": true,
   "bin": {
-    "assets": "index.js"
+    "kairos": "index.js"
   },
   "scripts": {
     "test": "ava",

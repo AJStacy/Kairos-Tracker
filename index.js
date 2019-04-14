@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-import Kairos from './src';
+import cli from './src/cli';
+
+cli();

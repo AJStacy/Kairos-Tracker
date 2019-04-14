@@ -1,4 +1,5 @@
 #!/usr/bin/env node
-import cli from './src/cli';
+const cli = require('./dist/');
+const cfg = require('./package.json');
 
-cli();
+cli(cfg.version);

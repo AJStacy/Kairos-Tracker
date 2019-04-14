@@ -1,10 +1,9 @@
 import * as program from 'commander';
 
 import kairos from '../index';
-import * as config from '../../package.json';
 
-const cli = () => {
-  program.version(config.version);
+const cli = (version: string):void => {
+  program.version(version);
   program
     .command('start [label]')
     .option('-m, --message', 'Add a message to your time interval.')

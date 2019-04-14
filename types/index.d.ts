@@ -1,2 +1,2 @@
-import * as Kairos from './Kairos';
-export default Kairos;
+import * as kairos from './kairos';
+export default kairos;

@@ -15,7 +15,7 @@ const timestamp = ():string => {
   return formatTime(time, 'YYYY-MM-DD HH:MM:ss.SSSZZ');
 };
 
-const newInterval = (message?: string) => ({
+const newInterval = (message?: string):Interval => ({
   start: timestamp(),
   ...message && { message },
 });

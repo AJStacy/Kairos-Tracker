@@ -10,7 +10,11 @@ const timestamp = () => {
     return formatTime(time, 'YYYY-MM-DD HH:MM:ss.SSSZZ');
 };
 exports.timestamp = timestamp;
-const newInterval = (message) => (Object.assign({ start: timestamp() }, message && { message }));
+const newInterval = (message = '') => ({
+    start: timestamp(),
+    end: '',
+    message,
+});
 exports.newInterval = newInterval;
 const writeInterval = (id, interval) => (db_1.default.set(`intervals.${id}`, interval).write());
 const getInterval = (id) => db_1.default.get(`intervals.${id}`).value();
@@ -21,11 +25,14 @@ const deleteInterval = (id) => db_1.default.unset(`intervals.${id}`).write();
 exports.deleteInterval = deleteInterval;
 const listIntervals = () => {
     const intervals = db_1.default.get('intervals').value();
+    console.log("intervals", intervals);
     const table = Object.keys(intervals).map(id => [id, ...Object.values(intervals[id])]);
+    console.log(table);
     table.unshift([
-        chalk_1.default.inverse(' ID '),
+        chalk_1.default.inverse(' Label '),
         chalk_1.default.inverse(' Start Time '),
         chalk_1.default.inverse(' End Time '),
+        chalk_1.default.inverse(' Message '),
     ]);
     return table;
 };

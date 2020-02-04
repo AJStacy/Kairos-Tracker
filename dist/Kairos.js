@@ -4,6 +4,7 @@ const logs_1 = require("./logs");
 const interval_1 = require("./interval/interval");
 const start = (label, message) => {
     const interval = interval_1.newInterval(message);
+    console.log("INTERVAL", interval);
     if (label) {
         interval_1.writeLabeledInterval(label, interval);
     }

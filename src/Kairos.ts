@@ -8,8 +8,9 @@ import {
   writeUnlabeledInterval,
 } from './interval/interval';
 
-const start = (label?: string, message?: string):void => {
+const start = (label: string, message?: string):void => {
   const interval = newInterval(message);
+  console.log("INTERVAL", interval);
   if (label) {
     writeLabeledInterval(label, interval);
   } else {

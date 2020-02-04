@@ -1,10 +1,10 @@
 export declare type Interval = {
     start: string;
-    end?: string;
-    message?: string;
+    end: string;
+    message: string;
 };
 declare const timestamp: () => string;
-declare const newInterval: (message?: string | undefined) => Interval;
+declare const newInterval: (message?: string) => Interval;
 declare const getInterval: (id: string) => Interval;
 declare const updateInterval: (id: string, changes: object) => void;
 declare const deleteInterval: (id: string) => boolean;

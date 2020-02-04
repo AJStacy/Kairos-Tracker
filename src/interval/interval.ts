@@ -7,8 +7,8 @@ import db from '../db';
 
 export type Interval = {
   start: string;
-  end?: string;
-  message?: string;
+  end: string;
+  message: string;
 };
 
 const timestamp = ():string => {
@@ -16,9 +16,10 @@ const timestamp = ():string => {
   return formatTime(time, 'YYYY-MM-DD HH:MM:ss.SSSZZ');
 };
 
-const newInterval = (message?: string):Interval => ({
+const newInterval = (message: string = ''):Interval => ({
   start: timestamp(),
-  ...message && { message },
+  end: '',
+  message,
 });
 
 const writeInterval = (id: string, interval: Interval):Interval => (
@@ -35,11 +36,14 @@ const deleteInterval = (id: string):boolean => db.unset(`intervals.${id}`).write
 
 const listIntervals = ():any[][] => {
   const intervals = db.get('intervals').value();
+  console.log("intervals", intervals);
   const table = Object.keys(intervals).map(id => [id, ...Object.values(intervals[id])]);
+  console.log(table);
   table.unshift([
-    chalk.inverse(' ID '),
+    chalk.inverse(' Label '),
     chalk.inverse(' Start Time '),
     chalk.inverse(' End Time '),
+    chalk.inverse(' Message '),
   ]);
   return table;
 };

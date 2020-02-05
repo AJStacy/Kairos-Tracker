@@ -5,17 +5,21 @@ import kairos from '../index';
 export const cli = (version: string):void => {
   program.version(version);
   program
-    .command('start <label>')
-    .option('-m, --message', 'Add a message to your time interval.')
-    .action((label: string, cmd: any) => kairos.start(label, cmd.message));
+    .command('start [label]')
+    .option('-m, --message <message>', 'Add a message to your time interval.')
+    .action((label: string, cmd: { message: string; }) => kairos.start(label, cmd.message));
 
   program
-    .command('stop <label>')
-    .action((label: string) => kairos.stop(label));
+    .command('stop <id>')
+    .action((id: string) => kairos.stop(id));
 
   program
-    .command('list [period]')
-    .action((period) => kairos.list(period));
+    .command('list [id]')
+    .action((id) => kairos.list(id));
+
+  program
+    .command('project <name>')
+    .action((name) => kairos.project(name));
 
   program.parse(process.argv);
 };

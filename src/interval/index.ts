@@ -1,3 +1,15 @@
-import * as interval from './interval';
+export {
+  timestamp,
+  listIntervals,
+  newInterval,
+  writeUnlabeledInterval,
+  confirmLabel,
+} from './interval';
 
-export default interval;
+export {
+  writeInterval,
+  getIntervals,
+  getInterval,
+  updateInterval,
+  deleteInterval,
+} from './crud';

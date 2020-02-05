@@ -4,17 +4,23 @@ import {
   newInterval,
   listIntervals,
   updateInterval,
-  writeLabeledInterval,
   writeUnlabeledInterval,
-} from './interval/interval';
+  writeInterval,
+  confirmLabel,
+} from './interval';
+import db from './db';
 
-const start = (label: string, message?: string):void => {
-  const interval = newInterval(message);
-  console.log("INTERVAL", interval);
-  if (label) {
-    writeLabeledInterval(label, interval);
-  } else {
-    logs.info('The new time interval ID: ', writeUnlabeledInterval(interval));
+const start = async (label?: string, message?: string):Promise<void> => {
+  try {
+    const interval = newInterval(message);
+    if (label && confirmLabel(db.get(`intervals.${label}`).value())) {
+      writeInterval(label, interval);
+    }
+    if (label === undefined) {
+      logs.info('Your new timer ID: ', writeUnlabeledInterval(interval));
+    }
+  } catch (e) {
+    logs.error(e);
   }
 };
 
@@ -26,11 +32,22 @@ const stop = (id: string):void => {
   }
 };
 
-const list = (period?: string):void => {
+const list = (id?: string):void => {
   try {
+    const query = db.get(id ? `intervals.${id}` : 'intervals').value();
     logs.table(
-      listIntervals()
+      Object.keys(query).length > 1 
+      ? listIntervals(query) 
+      : listIntervals({ [id ?? 'missing']: query })
     );
+  } catch (e) {
+    logs.error(e);
+  }
+};
+
+const project = (name: string):void => {
+  try {
+    console.log("THE NAME FOR YOUR PROJECT", name);
   } catch (e) {
     logs.error(e);
   }
@@ -40,4 +57,5 @@ export {
   start,
   stop,
   list,
+  project,
 };

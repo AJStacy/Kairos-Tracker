@@ -13,18 +13,48 @@ const chalk_1 = require("chalk");
 const date_fns_1 = require("date-fns");
 const shortid = require("shortid");
 const enquirer_1 = require("enquirer");
+const util_1 = require("../util");
+const db_1 = require("../db");
+const logs_1 = require("../logs");
 const crud_1 = require("./crud");
-const timestamp = () => {
-    const time = new Date();
-    return date_fns_1.formatISO(time, { format: 'basic' });
+exports.start = (label, message) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const interval = newInterval(message);
+        if (label && confirmLabel(db_1.default.get(`intervals.${label}`).value())) {
+            crud_1.writeInterval(label, interval);
+        }
+        if (label === undefined) {
+            logs_1.default.info('Your new timer ID: ', writeUnlabeledInterval(interval));
+        }
+    }
+    catch (e) {
+        logs_1.default.error(e);
+    }
+});
+exports.stop = (id) => {
+    try {
+        crud_1.updateInterval(id, { end: util_1.timestamp() });
+    }
+    catch (e) {
+        logs_1.default.error(e);
+    }
 };
-exports.timestamp = timestamp;
+exports.list = (id) => {
+    try {
+        const query = db_1.default.get(id ? `intervals.${id}` : 'intervals').value();
+        logs_1.default.table(Object.keys(query).length > 1
+            ? listIntervals(query)
+            : listIntervals({ [(id !== null && id !== void 0 ? id : 'missing')]: query }));
+    }
+    catch (e) {
+        logs_1.default.error(e);
+    }
+};
 const newInterval = (message = '') => ({
-    start: timestamp(),
+    start: util_1.timestamp(),
     end: '',
     message,
 });
-exports.newInterval = newInterval;
 const listIntervals = (intervals) => {
     const table = Object.keys(intervals).map(label => [
         label,
@@ -40,7 +70,6 @@ const listIntervals = (intervals) => {
     ]);
     return table;
 };
-exports.listIntervals = listIntervals;
 const timeEllapsed = (start, end) => {
     if (start && end) {
         return date_fns_1.formatDistanceStrict(date_fns_1.parseISO(end), date_fns_1.parseISO(start));
@@ -52,7 +81,6 @@ const writeUnlabeledInterval = (interval) => {
     crud_1.writeInterval(id, interval);
     return id;
 };
-exports.writeUnlabeledInterval = writeUnlabeledInterval;
 const confirmLabel = (interval) => __awaiter(void 0, void 0, void 0, function* () {
     if (interval) {
         const response = yield enquirer_1.prompt({
@@ -64,4 +92,3 @@ const confirmLabel = (interval) => __awaiter(void 0, void 0, void 0, function* (
     }
     return true;
 });
-exports.confirmLabel = confirmLabel;

@@ -1,14 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var interval_1 = require("./interval");
-exports.timestamp = interval_1.timestamp;
-exports.listIntervals = interval_1.listIntervals;
-exports.newInterval = interval_1.newInterval;
-exports.writeUnlabeledInterval = interval_1.writeUnlabeledInterval;
-exports.confirmLabel = interval_1.confirmLabel;
-var crud_1 = require("./crud");
-exports.writeInterval = crud_1.writeInterval;
-exports.getIntervals = crud_1.getIntervals;
-exports.getInterval = crud_1.getInterval;
-exports.updateInterval = crud_1.updateInterval;
-exports.deleteInterval = crud_1.deleteInterval;
+exports.start = interval_1.start;
+exports.stop = interval_1.stop;
+exports.list = interval_1.list;

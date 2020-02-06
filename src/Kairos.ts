@@ -1,61 +1,25 @@
-import logs from './logs';
-import {
-  timestamp,
-  newInterval,
-  listIntervals,
-  updateInterval,
-  writeUnlabeledInterval,
-  writeInterval,
-  confirmLabel,
-} from './interval';
-import db from './db';
+import * as program from 'commander';
+import { start, stop, list } from './interval';
+import { project } from './project';
 
-const start = async (label?: string, message?: string):Promise<void> => {
-  try {
-    const interval = newInterval(message);
-    if (label && confirmLabel(db.get(`intervals.${label}`).value())) {
-      writeInterval(label, interval);
-    }
-    if (label === undefined) {
-      logs.info('Your new timer ID: ', writeUnlabeledInterval(interval));
-    }
-  } catch (e) {
-    logs.error(e);
-  }
-};
+export const cli = (version: string):void => {
+  program.version(version);
+  program
+    .command('start [label]')
+    .option('-m, --message <message>', 'Add a message to your time interval.')
+    .action((label: string, cmd: { message: string; }) => start(label, cmd.message));
 
-const stop = (id: string):void => {
-  try {
-    updateInterval(id, { end: timestamp() });
-  } catch (e) {
-    logs.error(e);
-  }
-};
+  program
+    .command('stop <id>')
+    .action((id: string) => stop(id));
 
-const list = (id?: string):void => {
-  try {
-    const query = db.get(id ? `intervals.${id}` : 'intervals').value();
-    logs.table(
-      Object.keys(query).length > 1 
-      ? listIntervals(query) 
-      : listIntervals({ [id ?? 'missing']: query })
-    );
-  } catch (e) {
-    logs.error(e);
-  }
-};
+  program
+    .command('list [id]')
+    .action((id) => list(id));
 
-const project = (name: string):void => {
-  try {
-    console.log("THE NAME FOR YOUR PROJECT", name);
-  } catch (e) {
-    logs.error(e);
-  }
-};
+  program
+    .command('project <name>')
+    .action((name) => project(name));
 
-export {
-  start,
-  stop,
-  list,
-  project,
+  program.parse(process.argv);
 };

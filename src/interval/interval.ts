@@ -1,13 +1,49 @@
 import chalk from 'chalk';
-import { formatISO, parseISO, formatDistanceStrict } from 'date-fns';
+import { parseISO, formatDistanceStrict } from 'date-fns';
 import * as shortid from 'shortid';
 import { prompt } from 'enquirer';
 import { Interval, Intervals } from '../_contracts';
-import { writeInterval } from './crud';
+import { timestamp } from '../util';
+import db from '../db';
+import logs from '../logs';
+import {
+  writeInterval,
+  updateInterval,
+} from './crud';
 
-const timestamp = ():string => {
-  const time = new Date();
-  return formatISO(time, { format: 'basic' });
+export const start = async (label?: string, message?: string):Promise<void> => {
+  try {
+    const interval = newInterval(message);
+    if (label && confirmLabel(db.get(`intervals.${label}`).value())) {
+      writeInterval(label, interval);
+    }
+    if (label === undefined) {
+      logs.info('Your new timer ID: ', writeUnlabeledInterval(interval));
+    }
+  } catch (e) {
+    logs.error(e);
+  }
+};
+
+export const stop = (id: string):void => {
+  try {
+    updateInterval(id, { end: timestamp() });
+  } catch (e) {
+    logs.error(e);
+  }
+};
+
+export const list = (id?: string):void => {
+  try {
+    const query = db.get(id ? `intervals.${id}` : 'intervals').value();
+    logs.table(
+      Object.keys(query).length > 1 
+      ? listIntervals(query) 
+      : listIntervals({ [id ?? 'missing']: query })
+    );
+  } catch (e) {
+    logs.error(e);
+  }
 };
 
 const newInterval = (message: string = ''):Interval => ({
@@ -55,12 +91,4 @@ const confirmLabel = async (interval: Interval):Promise<boolean> => {
     return response.confirmation;
   }
   return true;
-}
-
-export {
-  timestamp,
-  listIntervals,
-  newInterval,
-  writeUnlabeledInterval,
-  confirmLabel,
 };

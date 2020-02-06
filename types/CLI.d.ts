@@ -1,2 +1,1 @@
-declare const cli: () => void;
-export default cli;
+export declare const cli: (version: string) => void;

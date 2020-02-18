@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { cli } = require('./dist/cli/cli');
+const { cli } = require('./dist');
 const cfg = require('./package.json');
 
 cli(cfg.version);

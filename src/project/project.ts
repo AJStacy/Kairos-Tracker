@@ -1,27 +1,22 @@
-import { prompt } from 'enquirer';
 import logs from '../logs';
-import {
-  projectExists,
+import { projects } from './table';
+import * as UI from './ui';
+import { timestamp } from '../util';
 
-} from './crud';
-
-export const project = (name: string):void => {
+export const project = async (name: string):Promise<void> => {
   try {
-    
+    if (projects.exists(name)) {
+      const shouldOverwrite = await UI.confirmProject(name);
+      if (shouldOverwrite) {
+        
+      }
+    }
   } catch (e) {
     logs.error(e);
   }
 };
 
-const confirmProject = async (name: string):Promise<boolean> => {
-  if (projectExists(name)) {
-    logs.warn(`A project with the name ${name} already exists. Please delete it first if you would like to create a new one.`);
-    const response: { confirmation: boolean } = await prompt({
-      type: 'confirm',
-      name: 'confirmation',
-      message: 'Project already exists. Would you like to overwrite it?',
-    });
-    return response.confirmation;
-  }
-  return true;
-}
+// projects.overwrite(name, {
+//   created: timestamp(),
+//   message: '',
+// });

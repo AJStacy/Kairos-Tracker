@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const cli = require("./cli");
-exports.default = cli;
+var cli_1 = require("./cli");
+exports.cli = cli_1.cli;

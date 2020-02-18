@@ -1,3 +1,3 @@
-import db from './db';
-
-export default db;
+export { DB } from './db';
+export { Table } from './table';
+export { KDB, kdb } from './kdb';

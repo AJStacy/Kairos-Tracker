@@ -1,7 +1,7 @@
 import * as program from 'commander';
 import { start, stop, list } from '../interval';
 import { project } from '../project';
-import { StartArgs } from '../_contracts';
+import { StartArgs, ProjectArgs } from '../_contracts';
 
 export const cli = (version: string):void => {
   program.version(version);
@@ -20,7 +20,8 @@ export const cli = (version: string):void => {
 
   program
     .command('project <name>')
-    .action((name) => project(name));
+    .option('-m, --message <message>', 'Add a message to your project.')
+    .action((name: string, cmd: ProjectArgs) => project(name, cmd));
 
   program.parse(process.argv);
 };

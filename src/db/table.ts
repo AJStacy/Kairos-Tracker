@@ -1,43 +1,43 @@
 import { DB } from '.';
-import { Table as DBTable, TableName, RowID, Row, Tables } from '../_contracts';
+import { Tables } from '../_contracts';
 
-export class Table<DBSchema, MyTable extends keyof Tables> {
+export class Table<MyTable extends keyof Tables> {
 
-  private db: DB<DBSchema>;
+  private db: DB;
 
-  private name: TableName;
+  private name: MyTable;
 
-  constructor(db: DB<DBSchema>, name: TableName) {
+  constructor(db: DB, name: MyTable) {
     this.db = db;
     this.name = name;
   }
 
-  public all():DBTable {
-    return this.db.table(this.name);
+  public all():Tables[MyTable] {
+    return this.db.table<MyTable>(this.name);
   }
 
-  public exists(id: RowID<MyTable>):boolean {
-    return this.db.exists(this.name, id);
+  public exists(id: keyof Tables[MyTable]):boolean {
+    return this.db.exists<MyTable>(this.name, id);
   }
 
-  public create(id: RowID<MyTable>, cols: Row<MyTable>):void {
-    this.db.create(this.name, id, cols);
+  public create(id: keyof Tables[MyTable], cols: Tables[MyTable][keyof Tables[MyTable]]):void {
+    this.db.create<MyTable>(this.name, id, cols);
   }
 
-  public overwrite(id: RowID<MyTable>, cols: Row<MyTable>):void {
+  public overwrite(id: keyof Tables[MyTable], cols: Tables[MyTable][keyof Tables[MyTable]]):void {
     this.delete(id);
     this.create(id, cols);
   }
 
-  public read(id: RowID<MyTable>):Row<MyTable> {
+  public read(id: keyof Tables[MyTable]):Tables[MyTable][keyof Tables[MyTable]] {
     return this.db.read(this.name, id);
   }
 
-  public update(id: RowID<MyTable>, cols: Partial<Row<MyTable>>):void {
+  public update(id: keyof Tables[MyTable], cols: Partial<Tables[MyTable][keyof Tables[MyTable]]>):void {
     this.db.update(this.name, id, cols);
   }
 
-  public delete(id: RowID<MyTable>):void {
+  public delete(id: keyof Tables[MyTable]):void {
     this.db.delete(this.name, id);
   }
 

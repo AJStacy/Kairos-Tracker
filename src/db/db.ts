@@ -1,15 +1,10 @@
 import * as os from 'os';
 import * as fs from 'fs';
 import * as lowdb from 'lowdb';
-import * as FileSync from 'lowdb/adapters/FileSync';
-import {
-  Table,
-  TableName,
-  RowID,
-  Row,
-} from '../_contracts';
+import * as FileAsync from 'lowdb/adapters/FileSync';
+import { DBSchema, Tables } from '../_contracts';
 
-export class DB<DBSchema> {
+export class DB {
 
   private db: lowdb.LowdbSync<DBSchema>;
 
@@ -23,7 +18,7 @@ export class DB<DBSchema> {
   private setup(defaults: DBSchema, home: string):lowdb.LowdbSync<DBSchema> {
     // Setup the database
     if (!fs.existsSync(home)) { fs.mkdirSync(home); }
-    const adapter = new FileSync<DBSchema>(`${home}/db.json`);
+    const adapter = new FileAsync<DBSchema>(`${home}/db.json`);
     const db = lowdb(adapter);
     
     // Sets the db defaults
@@ -32,27 +27,27 @@ export class DB<DBSchema> {
     return db;
   }
 
-  public table(name: TableName):Table {
+  public table<Name extends keyof Tables>(name: Name):Tables[Name] {
     return this.db.get(name).value();
   }
 
-  public exists(table_name: TableName, id: RowID):boolean {
+  public exists<Name extends keyof Tables>(table_name: Name, id: keyof Tables[Name]):boolean {
     return this.db.has(`${table_name}.${id}`).value();
   }
 
-  public create(table_name: TableName, id: RowID, cols: Row):void {
+  public create<Name extends keyof Tables>(table_name: Name, id: keyof Tables[Name], cols: Tables[Name][keyof Tables[Name]]):void {
     this.db.set(`${table_name}.${id}`, cols).write();
   }
 
-  public read(table_name: TableName, id: RowID):Row {
+  public read<Name extends keyof Tables>(table_name: Name, id: keyof Tables[Name]):Tables[Name][keyof Tables[Name]] {
     return this.db.get(`${table_name}.${id}`).value();
   }
 
-  public update(table_name: TableName, id: RowID, cols: Partial<Row>):void {
+  public update<Name extends keyof Tables>(table_name: Name, id: keyof Tables[Name], cols: Partial<Tables[Name][keyof Tables[Name]]>):void {
     this.db.set(`${table_name}.${id}`, { ...this.read(table_name, id), ...cols}).write();
   }
 
-  public delete(table_name: TableName, id: RowID):void {
+  public delete<Name extends keyof Tables>(table_name: Name, id: keyof Tables[Name]):void {
     this.db.unset(`${table_name}.${id}`).write();
   }
 

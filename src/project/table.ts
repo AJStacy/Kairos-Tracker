@@ -1,9 +1,9 @@
 import { kdb, Table } from '../db';
-import { DBSchema } from '../_contracts';
+import { DBSchema, Projects } from '../_contracts';
 import { timestamp } from '../util';
 import { Project } from '../_contracts';
 
-export const projects = new Table<DBSchema, 'projects'>(kdb, 'projects');
+export const projects = new Table<'projects'>(kdb, 'projects');
 
 // export const getProjects = kdb.get('projects').value();
 

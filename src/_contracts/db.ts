@@ -16,5 +16,8 @@ export interface Tables {
 
 export type TableName = keyof Tables;
 export type Table = DBSchema['tables'][TableName];
-export type RowID<MyTable extends TableName> = keyof DBSchema['tables'][MyTable];
-export type Row<MyTable extends TableName> = DBSchema['tables'][MyTable][RowID<MyTable>];
+export type RowID = keyof DBSchema['tables'][TableName];
+export type Row = DBSchema['tables'][TableName][RowID];
+
+export type TableRowID<MyTable extends TableName> = keyof DBSchema['tables'][MyTable];
+export type TableRow<MyTable extends TableName> = DBSchema['tables'][MyTable][TableRowID<MyTable>];
